@@ -172,6 +172,9 @@ def process_entry(
             "AWS_SECRET_ACCESS_KEY": os.getenv("AWS_SECRET_ACCESS_KEY"),
             "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY"),
             "OpenRouter_API_KEY": os.getenv("OpenRouter_API_KEY"),
+            "NVIDIA_NIM_API_KEY": os.getenv("NVIDIA_NIM_API_KEY"),
+            "OLLAMA_API_KEY": os.getenv("OLLAMA_API_KEY", "ollama"),
+            "OLLAMA_BASE_URL": os.getenv("OLLAMA_DOCKER_BASE_URL", "http://host.docker.internal:11434/v1"),
         }
         safe_log("Running the agent")
         cmd = [

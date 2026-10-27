@@ -10,11 +10,11 @@ import anthropic
 import backoff
 import openai
 
-from llm import create_client
+from llm import CHAT_PROVIDERS, DEFAULT_LLM, chat_completion_with_fallback, create_client
 from tools import load_all_tools
 
 CLAUDE_MODEL = "anthropic/claude-sonnet-4"
-OPENAI_MODEL = "gpt-5"
+OPENAI_MODEL = DEFAULT_LLM
 
 
 def process_tool_call(tools_dict, tool_name, tool_input):
@@ -42,7 +42,7 @@ def get_response_withtools(
     client, model, messages, tools, tool_choice, logging=None, max_retry=3
 ):
     try:
-        if model.startswith("o") or "gpt" in model.lower():
+        if (not model.startswith(CHAT_PROVIDERS) and (model.startswith("o") or "gpt" in model.lower())):
             response = client.responses.create(
                 model=model,
                 # reasoning={"effort": "low"},
@@ -56,6 +56,12 @@ def get_response_withtools(
                 tool_choice=tool_choice,
                 tools=tools,
                 parallel_tool_calls=False,
+            )
+        elif model.startswith(CHAT_PROVIDERS):
+            response = chat_completion_with_fallback(
+                client, model, logging=logging or print,
+                messages=[{"role": "system", "content": "You are the best coder in the world!"}] + messages,
+                tool_choice=tool_choice, tools=tools,
             )
         else:
             response = client.chat.completions.create(
@@ -93,7 +99,7 @@ def check_for_tool_use(response, model=""):
     Checks if the response contains a tool call.
     """
 
-    if model.startswith("o") or "gpt" in model.lower():
+    if (not model.startswith(CHAT_PROVIDERS) and (model.startswith("o") or "gpt" in model.lower())):
         # OpenAI, check for tool_calls in response
         for tool_call in response.output:
             if tool_call.type == "function_call":
@@ -144,7 +150,7 @@ def convert_tool_info(tool_info, model=None):
                 },
             },
         }
-    elif model.startswith("o") or "gpt" in model.lower():
+    elif (not model.startswith(CHAT_PROVIDERS) and (model.startswith("o") or "gpt" in model.lower())):
 
         def add_additional_properties(d):
             if isinstance(d, dict):
@@ -389,7 +395,7 @@ def convert_msg_history(msg_history, model=None):
     """
     Convert message history from the model-specific format to a generic format.
     """
-    if model.startswith("o") or "gpt" in model.lower():
+    if (not model.startswith(CHAT_PROVIDERS) and (model.startswith("o") or "gpt" in model.lower())):
         return convert_msg_history_openai(msg_history)
     else:
         return convert_msg_history_open_router(msg_history)
@@ -407,7 +413,7 @@ def chat_with_agent(
     if msg_history is None:
         msg_history = []
 
-    if model.startswith("o") or "gpt" in model.lower():
+    if (not model.startswith(CHAT_PROVIDERS) and (model.startswith("o") or "gpt" in model.lower())):
         # OpenAI models
         new_msg_history, n_llm_calls = chat_with_agent_openai(
             msg,

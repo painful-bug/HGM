@@ -138,7 +138,7 @@ class AgenticSystem:
 
     def get_current_edits(self):
         diff = str(diff_versus_commit(self.git_dir, self.base_commit))
-        if "gpt" in self.code_model or self.code_model.lower().startswith("o"):
+        if not self.code_model.startswith(("nim/", "ollama/")) and ("gpt" in self.code_model or self.code_model.lower().startswith("o")):
             new_msg_history = [
                 {
                     "role": "user",

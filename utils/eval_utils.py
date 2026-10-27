@@ -80,7 +80,7 @@ def score_tie_breaker(
     )
     best_score_index = best_score_indices[0]
     try:
-        client = create_client("o3")
+        client = create_client(os.getenv("HGM_MODEL", os.getenv("DGM_MODEL", "nim/nvidia/nemotron-3-ultra-550b-a55b")))
         proposed_solutions = [
             f"# Proposed solution {i+1}\n\n<code_diff_{i+1}>\n{code_diffs[index]}\n</code_diff{i+1}>\n<test_report_{i+1}>\n{test_reports[index]}\n</test_report_{i+1}>"
             for i, index in enumerate(best_score_indices)

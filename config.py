@@ -12,9 +12,9 @@ from typing import Optional, List, Dict, Any
 @dataclass
 class LLMConfig:
     """Configuration for Language Model settings."""
-    self_improve_llm: str = "gpt-5-mini"
-    downstream_llm: str = "gpt-5-mini"
-    diagnose_llm: str = "gpt-5-mini"
+    self_improve_llm: str = "nim/nvidia/nemotron-3-ultra-550b-a55b"
+    downstream_llm: str = "nim/nvidia/nemotron-3-ultra-550b-a55b"
+    diagnose_llm: str = "nim/nvidia/nemotron-3-ultra-550b-a55b"
 
 
 @dataclass

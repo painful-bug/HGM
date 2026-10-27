@@ -3,13 +3,13 @@
 # Language Model Configuration
 llm:
   # Model used for self-improvement tasks
-  self_improve_llm: "gpt-5-mini"
+  self_improve_llm: "nim/nvidia/nemotron-3-ultra-550b-a55b"
   
   # Model used for downstream evaluation tasks
-  downstream_llm: "gpt-5-mini"
+  downstream_llm: "nim/nvidia/nemotron-3-ultra-550b-a55b"
   
   # Model used for problem diagnosis
-  diagnose_llm: "gpt-5-mini"
+  diagnose_llm: "nim/nvidia/nemotron-3-ultra-550b-a55b"
 
 # Optimization Algorithm Parameters
 optimization:

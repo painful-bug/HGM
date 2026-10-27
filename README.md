@@ -75,3 +75,17 @@ The code in this repository is built upon the code from the [Darwin-Gödel Machi
       url={https://arxiv.org/abs/2510.21614}, 
 }
 ```
+
+## NVIDIA NIM and Ollama
+
+The default model is `nim/nvidia/nemotron-3-ultra-550b-a55b`. Set
+`NVIDIA_NIM_API_KEY` in your shell or this checkout's `.env`. If the key is
+missing or a NIM request fails, HGM tries the local `ollama/qwen3.5:4b` model;
+start Ollama and pull that model first. Set all three model entries in
+`config.yaml` to `ollama/<model>` to use Ollama directly. Host-side Ollama
+defaults to `http://localhost:11434/v1`; Docker uses
+`http://host.docker.internal:11434/v1`. Override these separately with
+`OLLAMA_BASE_URL` and `OLLAMA_DOCKER_BASE_URL` if needed. Provider fallback can
+change model quality and results. Existing cached initial agents or resumed
+runs retain their copied source; start with a new initial agent name for these
+changes to be copied into a new run.
